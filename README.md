@@ -1,29 +1,95 @@
-# Online Course Completion ML Project
+# Online Course Completion Prediction 🎓
 
-This project predicts whether a student will complete an online course based on various engagement and demographic features.
+## 📌 Project Overview
+This project applies *Machine Learning* to predict whether a learner will complete an online course based on demographic, engagement, and activity data.
 
-## Project Structure
-- **Online_Course_Completion_Prediction.ipynb**: Jupyter Notebook with all steps (data preprocessing, model building, evaluation, and visualizations).
-- **online_course_completion.csv**: Dataset used for training and testing.
-- **.gitattributes**: Git LFS configuration for handling large dataset files.
+We built and compared three models:
+- *Logistic Regression*
+- *Random Forest*
+- *Gradient Boosting*
 
-## ML Algorithm
-- Logistic Regression (used for binary classification — predicting "completed" or "not completed").
-
-## Key Features
-- Data preprocessing: handling missing values, encoding categorical variables, and scaling.
-- Model training and evaluation using accuracy.
-- Confusion matrix and feature importance visualization.
-
-## How to Run
-1. Clone the repository:
-git clone https://github.com/sahana-portfolio/Online-Course-Completion-ML.git
-2. Install required libraries:
-pip install pandas numpy matplotlib scikit-learn seaborn
-3. Open the notebook:
-jupyter notebook
-Online_Course_Completion_Prediction.ipynb
+The best model is chosen based on accuracy and other performance metrics.
 
 ---
 
-**Author:** Sahana L
+## 📊 Dataset
+- *File:* online_course_completion.csv  
+- *Target Variable:* completed_course (1 = completed, 0 = not completed)  
+- *Features:*  
+  - age  
+  - continent  
+  - education_level  
+  - hours_per_week  
+  - num_logins_last_month  
+  - videos_watched_pct  
+  - assignments_submitted  
+  - discussion_posts  
+  - is_working_professional  
+  - preferred_device  
+  - *BMI* (engineered)  
+  - *engagement_score* (engineered)
+
+---
+
+## ⚙ Steps Performed
+1. *Data Loading & Exploration* – Basic inspection, datatype checks, missing values.  
+2. *Data Cleaning* – Filling missing values with median/mode.  
+3. *Feature Encoding* – One-hot encoding for categorical variables.  
+4. *Feature Engineering* – Added BMI & engagement score.  
+5. *Feature Scaling* – Standardization with StandardScaler.  
+6. *Model Training* – Logistic Regression, Random Forest, Gradient Boosting.  
+7. *Evaluation* – Accuracy, classification report, confusion matrix.  
+8. *Model Comparison* – Identify the best performing model.
+
+---
+
+## 🏆 Model Performance
+
+| Model               | Accuracy |
+|---------------------|----------|
+| Logistic Regression | XX.XX%   |
+| Random Forest       | XX.XX%   |
+| Gradient Boosting   | XX.XX%   |
+
+(Replace XX.XX% with your actual results from the notebook)
+
+---
+
+## 📂 Repository Structure
+├── notebooks/ │   └── Online_Course_Completion_Prediction.ipynb ├── online_course_completion.csv ├── README.md └── requirements.txt
+
+---
+
+## 🚀 How to Run
+```bash
+# Clone the repository
+git clone https://github.com/SahanaCodes27/Online-Course-Completion-ML.git
+
+# Go into the project directory
+cd Online-Course-Completion-ML
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Open Jupyter Notebook
+jupyter notebook
+
+---
+
+🛠 Technologies Used
+
+Python
+
+Pandas, NumPy
+
+Scikit-Learn
+
+Matplotlib, Seaborn
+
+
+
+---
+
+✨ Author
+
+Sahana
