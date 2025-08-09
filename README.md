@@ -58,18 +58,18 @@ Gradient Boosting	0.92
 
 1. Clone the repository
 
-git clone https://github.com/SahanaCodes27/Online-Course-Completion-ML.git
-cd Online-Course-Completion-ML
+   git clone https://github.com/SahanaCodes27/Online-Course-Completion-ML.git
+   cd Online-Course-Completion-ML
 
 
 2. Install dependencies
 
-pip install -r requirements.txt
+   pip install -r requirements.txt
 
 
 3. Open the Jupyter Notebook
 
-jupyter notebook notebooks/Online_Course_Completion_Prediction.ipynb
+   jupyter notebook notebooks/Online_Course_Completion_Prediction.ipynb
 
 
 4. Update dataset path in Step 2 of the notebook with your local .csv file.
