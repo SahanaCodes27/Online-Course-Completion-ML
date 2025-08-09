@@ -29,7 +29,7 @@ Dependency Management: Poetry
 
 Libraries: Pandas, NumPy, Scikit-learn, Matplotlib, Seaborn
 
-Modeling: Logistic Regression, Decision Tree, Gradient Boosting
+Modeling: Logistic Regression, Random Forest, Gradient Boosting
 
 Environment: Jupyter Notebook, CLI script
 
