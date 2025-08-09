@@ -90,7 +90,7 @@ poetry run jupyter notebook notebooks/Online_Course_Completion_Prediction.ipynb
 
 4️⃣ Run Training Script via CLI
 
-python3 train_model.py --data online_course_completion.csv --model gradient_boosting
+python train_model.py --data online_course_completion.csv
 
 Arguments:
 
@@ -101,7 +101,7 @@ Arguments:
 
 Example:
 
-python3 train_model.py --data online_course_completion.csv --model gradient_boosting
+python train_model.py --data online_course_completion.csv
 
 Output:
 
