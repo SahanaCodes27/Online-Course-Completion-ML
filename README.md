@@ -173,5 +173,3 @@ is_working_professional 0.023000
 ## ✍️ Author
 
 **Sahana**
-exactly matches your project results.
-Do you want me to do that?
