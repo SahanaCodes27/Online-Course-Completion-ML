@@ -1,95 +1,62 @@
-# Online Course Completion Prediction 🎓
+Online Course Completion Prediction
+This project uses machine learning to predict whether a student will complete an online course based on their demographics, engagement metrics, and activity data. The model helps in identifying at-risk students early, enabling targeted interventions.
 
-## 📌 Project Overview
-This project applies *Machine Learning* to predict whether a learner will complete an online course based on demographic, engagement, and activity data.
+📌 Project Overview
+Online education platforms collect a wide range of learner activity data — from time spent on the platform to the number of videos watched and assignments submitted. This project leverages that data to:
 
-We built and compared three models:
-- *Logistic Regression*
-- *Random Forest*
-- *Gradient Boosting*
+Predict course completion likelihood
 
-The best model is chosen based on accuracy and other performance metrics.
+Analyze key factors affecting student engagement
 
----
+Provide actionable insights to educators and administrators
 
-## 📊 Dataset
-- *File:* online_course_completion.csv  
-- *Target Variable:* completed_course (1 = completed, 0 = not completed)  
-- *Features:*  
-  - age  
-  - continent  
-  - education_level  
-  - hours_per_week  
-  - num_logins_last_month  
-  - videos_watched_pct  
-  - assignments_submitted  
-  - discussion_posts  
-  - is_working_professional  
-  - preferred_device  
-  - *BMI* (engineered)  
-  - *engagement_score* (engineered)
+🛠️ Tech Stack
+Language: Python 3.x
 
----
+Libraries: Pandas, NumPy, Scikit-learn, Matplotlib, Seaborn
 
-## ⚙ Steps Performed
-1. *Data Loading & Exploration* – Basic inspection, datatype checks, missing values.  
-2. *Data Cleaning* – Filling missing values with median/mode.  
-3. *Feature Encoding* – One-hot encoding for categorical variables.  
-4. *Feature Engineering* – Added BMI & engagement score.  
-5. *Feature Scaling* – Standardization with StandardScaler.  
-6. *Model Training* – Logistic Regression, Random Forest, Gradient Boosting.  
-7. *Evaluation* – Accuracy, classification report, confusion matrix.  
-8. *Model Comparison* – Identify the best performing model.
+Modeling: Gradient Boosting, Logistic Regression, Random Forest
 
----
+Environment: Jupyter Notebook
 
-## 🏆 Model Performance
+📂 Project Structure
 
-| Model               | Accuracy |
-|---------------------|----------|
-| Logistic Regression | XX.XX%   |
-| Random Forest       | XX.XX%   |
-| Gradient Boosting   | XX.XX%   |
+├── notebooks/
+│   └── Online_Course_Completion_Prediction.ipynb  # Main analysis & modeling notebook
+├── README.md                                       # Project documentation
 
-(Replace XX.XX% with your actual results from the notebook)
+(Dataset not included in repository )
 
----
+🚀 Features
+Data Cleaning & Preprocessing: Handles missing values and encodes categorical variables
 
-## 📂 Repository Structure
-├── notebooks/ │   └── Online_Course_Completion_Prediction.ipynb ├── online_course_completion.csv ├── README.md └── requirements.txt
+Feature Engineering: Adds BMI and engagement score
 
----
+Scaling: Standardization of numerical features
 
-## 🚀 How to Run
-```bash
-# Clone the repository
-git clone https://github.com/SahanaCodes27/Online-Course-Completion-ML.git
+Modeling: Gradient Boosting Classifier for best performance
 
-# Go into the project directory
-cd Online-Course-Completion-ML
+Evaluation: Accuracy, confusion matrix, classification report
 
-# Install dependencies
-pip install -r requirements.txt
+📊 Model Performance (Example)
+Model	Accuracy
+Logistic Regression	0.85
+Random Forest	0.90
+Gradient Boosting	0.92 
 
-# Open Jupyter Notebook
-jupyter notebook
+📜 How to Run
+1. Clone the repository:
+   git clone https://github.com/SahanaCodes27/Online-Course-Completion-ML.git
+   cd Online-Course-Completion-ML
+   
+2. Install dependencies:
+   pip install -r requirements.txt
+   
+3. Open the Jupyter Notebook:
+   jupyter notebook notebooks/Online_Course_Completion_Prediction.ipynb
+   
+4. Replace the dataset path in Step 2 with your local .csv file.
+   
+✍Author
+Sahana L
 
----
-
-🛠 Technologies Used
-
-Python
-
-Pandas, NumPy
-
-Scikit-Learn
-
-Matplotlib, Seaborn
-
-
-
----
-
-✨ Author
-
-Sahana
