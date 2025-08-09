@@ -1,108 +1,82 @@
 import argparse
-import os
 import pandas as pd
-from sklearn.model_selection import train_test_split
-from sklearn.ensemble import GradientBoostingClassifier, HistGradientBoostingClassifier
-from sklearn.pipeline import Pipeline
-from sklearn.compose import ColumnTransformer
-from sklearn.impute import SimpleImputer
-from sklearn.preprocessing import OneHotEncoder
-from sklearn.metrics import accuracy_score
+import os
 import joblib
-import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
+from sklearn.metrics import accuracy_score, classification_report
+
 
 class TrainModel:
     def __init__(self, data_path, model_type):
         self.data_path = data_path
         self.model_type = model_type
         self.model = None
-        self.feature_names = None
 
     def load_data(self):
-        print(f"Loading data from {self.data_path}...")
         df = pd.read_csv(self.data_path)
 
-        target_column = "completed_course"
-        X = df.drop(columns=[target_column])
-        y = df[target_column]
+        # Feature engineering
+        df['BMI'] = df['weight_kg'] / (df['height_cm'] / 100) ** 2
+        df['engagement_score'] = (
+            df['videos_watched_pct'] +
+            df['assignments_submitted'] +
+            df['discussion_posts']
+        )
 
-        return train_test_split(X, y, test_size=0.2, random_state=42)
+        features = [
+            'age', 'continent', 'education_level', 'hours_per_week',
+            'num_logins_last_month', 'videos_watched_pct',
+            'assignments_submitted', 'discussion_posts',
+            'is_working_professional', 'preferred_device', 'BMI', 'engagement_score'
+        ]
+        X = df[features]
+        y = df['completed_course']
 
-    def choose_model(self):
-        if self.model_type == "gradient_boosting":
-            self.model = GradientBoostingClassifier()
-        elif self.model_type == "hist_gradient_boosting":
-            self.model = HistGradientBoostingClassifier()
-        else:
-            raise ValueError("Unsupported model type")
+        X = pd.get_dummies(X, columns=['continent', 'education_level', 'preferred_device'], drop_first=True)
+        X.fillna(X.median(), inplace=True)
+
+        scaler = StandardScaler()
+        X_scaled = scaler.fit_transform(X)
+
+        return train_test_split(X_scaled, y, test_size=0.2, random_state=42)
 
     def train(self):
         X_train, X_test, y_train, y_test = self.load_data()
 
-        numeric_features = X_train.select_dtypes(include=['int64', 'float64']).columns
-        categorical_features = X_train.select_dtypes(include=['object']).columns
+        if self.model_type == "logistic_regression":
+            self.model = LogisticRegression(max_iter=1000)
+        elif self.model_type == "random_forest":
+            self.model = RandomForestClassifier(n_estimators=100, random_state=42)
+        elif self.model_type == "gradient_boosting":
+            self.model = GradientBoostingClassifier(n_estimators=100, random_state=42)
+        else:
+            raise ValueError(f"Unsupported model type: {self.model_type}")
 
-        numeric_transformer = Pipeline(steps=[
-            ('imputer', SimpleImputer(strategy='mean'))
-        ])
+        print(f"\nTraining {self.model_type}...")
+        self.model.fit(X_train, y_train)
+        y_pred = self.model.predict(X_test)
 
-        categorical_transformer = Pipeline(steps=[
-            ('imputer', SimpleImputer(strategy='most_frequent')),
-            ('encoder', OneHotEncoder(handle_unknown='ignore'))
-        ])
+        print(f"Accuracy: {accuracy_score(y_test, y_pred):.4f}")
+        print(classification_report(y_test, y_pred))
 
-        preprocessor = ColumnTransformer(
-            transformers=[
-                ('num', numeric_transformer, numeric_features),
-                ('cat', categorical_transformer, categorical_features)
-            ]
-        )
-
-        self.choose_model()
-
-        clf = Pipeline(steps=[
-            ('preprocessor', preprocessor),
-            ('classifier', self.model)
-        ])
-
-        print(f"Training model: {self.model_type}...")
-        clf.fit(X_train, y_train)
-
-        y_pred = clf.predict(X_test)
-        acc = accuracy_score(y_test, y_pred)
-        print(f"Accuracy: {acc:.4f}")
-
-        # Save model
+    def save_model(self):
         os.makedirs("models", exist_ok=True)
-        model_path = f"models/{self.model_type}_model.pkl"
-        joblib.dump(clf, model_path)
+        model_path = f"models/{self.model_type}.pkl"
+        joblib.dump(self.model, model_path)
         print(f"Model saved to {model_path}")
 
-        # Feature importances
-        self.print_feature_importances(preprocessor, clf.named_steps['classifier'], numeric_features, categorical_features)
-
-    def print_feature_importances(self, preprocessor, model, numeric_features, categorical_features):
-        if hasattr(model, "feature_importances_"):
-            # Get transformed feature names
-            cat_encoder = preprocessor.named_transformers_['cat'].named_steps['encoder']
-            cat_feature_names = cat_encoder.get_feature_names_out(categorical_features)
-            all_feature_names = np.concatenate([numeric_features, cat_feature_names])
-
-            # Match importances with names
-            importances = model.feature_importances_
-            sorted_idx = importances.argsort()[::-1]
-
-            print("\nTop 10 Most Important Features:")
-            for idx in sorted_idx[:10]:
-                print(f"{all_feature_names[idx]}: {importances[idx]:.4f}")
-        else:
-            print("\nModel does not support feature importances.")
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--data", required=True, help="Path to CSV file")
-    parser.add_argument("--model", required=True, choices=["gradient_boosting", "hist_gradient_boosting"], help="Model type")
+    parser = argparse.ArgumentParser(description="Train multiple machine learning models.")
+    parser.add_argument("--data", type=str, required=True, help="Path to the dataset CSV file.")
     args = parser.parse_args()
 
-    trainer = TrainModel(args.data, args.model)
-    trainer.train()
+    model_types = ["logistic_regression", "random_forest", "gradient_boosting"]
+
+    for model_type in model_types:
+        trainer = TrainModel(data_path=args.data, model_type=model_type)
+        trainer.train()
+        trainer.save_model()
