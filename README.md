@@ -1,5 +1,3 @@
----
-
 Online Course Completion Prediction
 
 This project uses machine learning to predict whether a student will complete an online course based on their demographics, engagement metrics, and activity data.
