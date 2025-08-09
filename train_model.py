@@ -14,6 +14,7 @@ class TrainModel:
         self.data_path = data_path
         self.model_type = model_type
         self.model = None
+        self.feature_names = []
 
     def load_data(self):
         df = pd.read_csv(self.data_path)
@@ -32,12 +33,20 @@ class TrainModel:
             'assignments_submitted', 'discussion_posts',
             'is_working_professional', 'preferred_device', 'BMI', 'engagement_score'
         ]
+
         X = df[features]
         y = df['completed_course']
 
+        # One-hot encode categorical features
         X = pd.get_dummies(X, columns=['continent', 'education_level', 'preferred_device'], drop_first=True)
+
+        # Save feature names for later
+        self.feature_names = X.columns.tolist()
+
+        # Fill missing values
         X.fillna(X.median(), inplace=True)
 
+        # Scale features
         scaler = StandardScaler()
         X_scaled = scaler.fit_transform(X)
 
@@ -46,6 +55,7 @@ class TrainModel:
     def train(self):
         X_train, X_test, y_train, y_test = self.load_data()
 
+        # Select model type
         if self.model_type == "logistic_regression":
             self.model = LogisticRegression(max_iter=1000)
         elif self.model_type == "random_forest":
@@ -59,8 +69,30 @@ class TrainModel:
         self.model.fit(X_train, y_train)
         y_pred = self.model.predict(X_test)
 
+        # Performance metrics
         print(f"Accuracy: {accuracy_score(y_test, y_pred):.4f}")
         print(classification_report(y_test, y_pred))
+
+        # Feature importance
+        self.print_top_features()
+
+    def print_top_features(self):
+        """Print top 10 features based on model coefficients or feature importance."""
+        if hasattr(self.model, "feature_importances_"):
+            importances = self.model.feature_importances_
+        elif hasattr(self.model, "coef_"):
+            importances = abs(self.model.coef_[0])
+        else:
+            print("\nThis model does not support feature importance.")
+            return
+
+        feature_importance_df = pd.DataFrame({
+            "Feature": self.feature_names,
+            "Importance": importances
+        }).sort_values(by="Importance", ascending=False)
+
+        print("\nTop 10 Features:")
+        print(feature_importance_df.head(10).to_string(index=False))
 
     def save_model(self):
         os.makedirs("models", exist_ok=True)
