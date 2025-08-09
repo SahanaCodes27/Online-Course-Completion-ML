@@ -47,7 +47,6 @@ Online-Course-Completion-ML/
 ├── pyproject.toml                                  # Poetry project configuration
 ├── poetry.lock                                     # Poetry dependency lock file
 ├── README.md                                       # Project documentation
-└── .gitignore                                      # Ignored files and folders
 
 > Note: Dataset is not included in the repository.
 
