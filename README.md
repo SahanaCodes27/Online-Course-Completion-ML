@@ -122,9 +122,6 @@ Decision Tree	0.90
 Gradient Boosting	0.96
 
 
-(Values are illustrative — see actual script output.)
-
-
 ---
 
 ✍️Author
