@@ -16,6 +16,11 @@ class TrainModel:
         self.model = None
         self.feature_names = []
 
+        # Always save inside repo's models folder
+        self.repo_dir = os.path.dirname(os.path.abspath(__file__))
+        self.models_dir = os.path.join(self.repo_dir, "models")
+        os.makedirs(self.models_dir, exist_ok=True)
+
     def load_data(self):
         df = pd.read_csv(self.data_path)
 
@@ -40,7 +45,7 @@ class TrainModel:
         # One-hot encode categorical features
         X = pd.get_dummies(X, columns=['continent', 'education_level', 'preferred_device'], drop_first=True)
 
-        # Save feature names for later
+        # Save feature names
         self.feature_names = X.columns.tolist()
 
         # Fill missing values
@@ -55,7 +60,7 @@ class TrainModel:
     def train(self):
         X_train, X_test, y_train, y_test = self.load_data()
 
-        # Select model type
+        # Select model
         if self.model_type == "logistic_regression":
             self.model = LogisticRegression(max_iter=1000)
         elif self.model_type == "random_forest":
@@ -69,15 +74,12 @@ class TrainModel:
         self.model.fit(X_train, y_train)
         y_pred = self.model.predict(X_test)
 
-        # Performance metrics
         print(f"Accuracy: {accuracy_score(y_test, y_pred):.4f}")
         print(classification_report(y_test, y_pred))
 
-        # Feature importance
         self.print_top_features()
 
     def print_top_features(self):
-        """Print top 10 features based on model coefficients or feature importance."""
         if hasattr(self.model, "feature_importances_"):
             importances = self.model.feature_importances_
         elif hasattr(self.model, "coef_"):
@@ -95,8 +97,7 @@ class TrainModel:
         print(feature_importance_df.head(10).to_string(index=False))
 
     def save_model(self):
-        os.makedirs("models", exist_ok=True)
-        model_path = f"models/{self.model_type}.pkl"
+        model_path = os.path.join(self.models_dir, f"{self.model_type}.pkl")
         joblib.dump(self.model, model_path)
         print(f"Model saved to {model_path}")
 
