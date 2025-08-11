@@ -4,7 +4,7 @@ This project uses machine learning to predict whether a student will complete an
 The goal is to help identify at-risk students early, enabling targeted interventions by educators.
 
 ---
-
+ 
 ## 📌 Project Overview 
 
 Online learning platforms generate rich data about learners — from time spent on the platform to assignments submitted.
